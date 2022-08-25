@@ -20,6 +20,7 @@
         <el-button type="primary" @click="handle_enter">enter</el-button>
       </el-form-item>
     </el-form>
+    <div>多数问题刷新页面即可解决，用户名重复将导致登录失败，roomkey为空则默认直播模式</div>
   </div>
 </template>
 

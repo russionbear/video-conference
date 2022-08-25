@@ -1,32 +1,30 @@
 # video-conference
+> socket.io + vue(setup) + webrtc
 
-## Project setup
-```
+## function
+
+基于p2p模式的多人聊天，当只有一人共享资源（音视频）时，等同于直播
+
+
+## run
+```shell
+#服务器端
+cd socketServer
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
+npm run start
+# 客户端
+npm install
 npm run serve
+
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
+## 小动作
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- 两个不共享视频或音频的端点之间不会有p2p连接，有也会自动断开
+- 因为[RTCPeerConnection断线重连](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/close)限制，对所有RTCPeerConnection对象进行保存引用
 
 
-### 业务
-主播只能被动建立连接  
-https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/close
-<!-- 不得静 -->
-
-### 断线重连
+## reference
+[架构代码，感谢感谢](https://github.com/wxiaoshuang/webrtc)
+[peerconnection](https://github.com/webrtc/samples/)

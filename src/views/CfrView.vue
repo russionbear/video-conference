@@ -2,17 +2,14 @@
   <div class="container">
     <!-- <audio ref="audio_ref"></audio> -->
     <el-scrollbar>
-      <ul class="infinite-list video-list" :style="{columns: IS_PHONE?1:3}">
+      <ul class="infinite-list video-list" :style="{ columns: IS_PHONE ? 1 : 3 }">
         <video v-for="item in remote_video" :key="item.socketId"
-          :hidden="item.stream===null||item.stream.getVideoTracks().length === 0"
-          :width="video_layout.videoW" :height="video_layout.videoH" 
-          :ref="set_dom_ref" :data-ref="item.socketId"
-          @click="handle_autoplay"
-          autoplay controls :title="clients[item.socketId].username"
-          ></video>
+          :hidden="item.stream === null || item.stream.getVideoTracks().length === 0" :width="video_layout.videoW"
+          :height="video_layout.videoH" :ref="set_dom_ref" :data-ref="item.socketId" @click="handle_autoplay" autoplay
+          controls :title="clients[item.socketId].username"></video>
         <video :width="video_layout.videoW" :height="video_layout.videoH" v-if="local_video.localStream !== null"
-          :hidden="local_video.localStream.getVideoTracks().length === 0" 
-          :ref="set_dom_ref" data-ref="" autoplay muted controls title="self"></video>
+          :hidden="local_video.localStream.getVideoTracks().length === 0" :ref="set_dom_ref" data-ref="" autoplay muted
+          controls title="self"></video>
       </ul>
     </el-scrollbar>
   </div>
@@ -82,8 +79,9 @@ import { onMounted, reactive, Ref, ref } from 'vue';
 // import { PeerConnection } from '@/config/ice';
 import { SocketUrl } from "@/config/socket"
 import { useRouter } from 'vue-router';
-import { IS_PHONE} from "@/config/platform"
+import { IS_PHONE } from "@/config/platform"
 import store from '@/store';
+import { ElMessage } from 'element-plus';
 
 // import { ElMessage } from 'element-plus';
 
@@ -112,17 +110,17 @@ const set_dom_ref = (el: HTMLVideoElement) => {
   }
   let user_id = el.dataset['ref'] as string
 
-  if(user_id==="big-share"){
+  if (user_id === "big-share") {
     share_dialog.ref = el
     el.srcObject = share_dialog.stream
     return
   }
-  else if(user_id===''){
+  else if (user_id === '') {
     local_video.ref = el
     el.srcObject = local_video.localStream
   }
 
-  let pc_node = remote_video.find(item=>item.socketId===user_id)
+  let pc_node = remote_video.find(item => item.socketId === user_id)
   if (pc_node === undefined) {
     return
   }
@@ -133,8 +131,8 @@ const set_dom_ref = (el: HTMLVideoElement) => {
 }
 
 const handle_autoplay = () => {
-  for(let i of remote_video){
-    if(i.ref!==null&&i.ref.paused){
+  for (let i of remote_video) {
+    if (i.ref !== null && i.ref.paused) {
       i.ref.play()
     }
   }
@@ -151,7 +149,7 @@ const remote_video = reactive<Array<RemoteNoteProps>>([])
 
 const local_video = reactive<{
   localStream: MediaStream | null,
-  ref: null| HTMLVideoElement,
+  ref: null | HTMLVideoElement,
   video_mode: "camera" | "share"
 }>({
   ref: null,
@@ -163,8 +161,8 @@ const local_video = reactive<{
 //----------------------sahre setting-------------------
 
 const share_dialog = reactive<{
-  ref: HTMLVideoElement|null,
-  stream: MediaStream|null,
+  ref: HTMLVideoElement | null,
+  stream: MediaStream | null,
   show: boolean,
   video_open: boolean,
   audio_open: boolean,
@@ -268,7 +266,7 @@ const pull_connection = async (userInfo: any, socketId?: string) => {
         continue
       }
 
-      if (!userInfo[i].video && !userInfo[i].audio&&local_video.localStream===null) {
+      if (!userInfo[i].video && !userInfo[i].audio && local_video.localStream === null) {
         console.log(userInfo[i], 'failed')
         continue
       }
@@ -525,7 +523,7 @@ const createPeerConnection = (user_id: string) => {
 
   pc.ontrack = (e) => {
     console.log("on track")
-    pc_node = remote_video.find(item=>item.socketId===user_id) as RemoteNoteProps
+    pc_node = remote_video.find(item => item.socketId === user_id) as RemoteNoteProps
     // pc_nod
     pc_node.stream = e.streams[0]
     let value = pc_node.ref
@@ -535,7 +533,7 @@ const createPeerConnection = (user_id: string) => {
       value.srcObject = e.streams[0]
       // refresh.value = !refresh.value
       // value.focus()
-    } 
+    }
 
   }
   if (local_video.localStream !== null) {
@@ -644,6 +642,15 @@ onMounted(async () => {
   message_view.room_title = room_title
 
   socket.value = io.connect(SocketUrl, { query: { username, roomTitle: room_title, roomKey: room_key } })
+  
+  setTimeout(() => {
+    if (Object.keys(clients.value).length === 0) {
+      ElMessage({
+        type: "error",
+        message: "登录信息错误"
+      })
+    }
+  }, 7000);
 
   socket.value.on('joined', (data: any) => {
     opra_bar.socketId = data['']
