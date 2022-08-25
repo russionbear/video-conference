@@ -22,3 +22,11 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### 业务
+主播只能被动建立连接  
+https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/close
+<!-- 不得静 -->
+
+### 断线重连

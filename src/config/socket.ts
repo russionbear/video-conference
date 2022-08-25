@@ -1,0 +1,1 @@
+export const SocketUrl = "http://localhost:9000"
