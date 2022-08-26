@@ -24,7 +24,9 @@ npm run serve
 - 两个不共享视频或音频的端点之间不会有p2p连接，有也会自动断开
 - 因为[RTCPeerConnection断线重连](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/close)限制，对所有RTCPeerConnection对象进行保存引用
 
+## a little pity
+- socket.io 版本才2.1.1，新版本会出现许多问题，socket.io-client也是
 
 ## reference
-[架构代码，感谢感谢](https://github.com/wxiaoshuang/webrtc)
+[架构代码，感谢感谢](https://github.com/wxiaoshuang/webrtc)  
 [peerconnection](https://github.com/webrtc/samples/)
